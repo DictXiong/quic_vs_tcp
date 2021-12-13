@@ -44,7 +44,7 @@ onlyfilessave = [savepath + '/' +
 				 f for f in listdir(openpath) if isfile(join(openpath, f))]
 
 def check(l):
-	return "50443" in l or "60443" in l
+	return "50443" in l or "60443" in l or "IP" in l
 
 for fich in onlyfiles:
 	average_bandwidth = 0
@@ -57,6 +57,8 @@ for fich in onlyfiles:
 		l = f.readline()
 		while not check(l):
 			l = f.readline()
+			if (l==''):
+				continue
 		div = l.split()
 		# tiempo 0 horas, 1 minutos, 2 segundos, 3 milisegundos
 		tiempo = div[0].split(':')
@@ -94,10 +96,12 @@ for fich in onlyfiles:
 				next(f)
 			except:
 				break
-
-	temp = tiempo[2].split('.')
-	final_time = float(tiempo[1]) * 60 + float(temp[0]
-											   ) + float(float(temp[1]) / 1000000)
+	try:
+		temp = tiempo[2].split('.')
+		final_time = float(tiempo[1]) * 60 + float(temp[0]
+												) + float(float(temp[1]) / 1000000)
+	except:
+		continue
 	rutasave = os.path.normpath(fich.replace(
 		openpath + '/', savepath + '/SUM'))
 	fichero = open(rutasave + '.txt', 'w')
