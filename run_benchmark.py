@@ -38,8 +38,8 @@ tcpHost = "12.12.12.101:50443"
 quicHost = "12.12.12.101"
 quicPort = "60443"
 certHostName = "pc1.ibd.ink"
-tcpClientCommand = f"wget -O /dev/null https://{tcpHost}/{testFile} --no-check-certificate"
-quicClientCommand = f"/home2/root/src/src/out/Default/quic_client --host={quicHost} --disable-certificate-verification --port={quicPort} https://{certHostName}/{testFile} > /dev/null"
+tcpClientCommand = "wget -O /dev/null https://{}/{} --no-check-certificate".format(tcpHost, testFile)
+quicClientCommand = "/home2/root/src/src/out/Default/quic_client --host={} --disable-certificate-verification --port={} https://{}/{} > /dev/null".format(quicHost, quicPort, certHostName, testFile)
 quicChromiumDownloadFilepath = "/dev/null"
 
 # tcpdump commands
@@ -69,9 +69,10 @@ def main():
 	args = parser.parse_args()
 
 	class params:
-		def __init__(self, protocol, bandwidth):
+		def __init__(self, protocol, bandwidth, tag):
 			self.protocol = protocol
 			self.bandwidth = bandwidth
+			self.tag = tag
 
 	paramsQueue = collections.deque()
 
@@ -82,7 +83,7 @@ def main():
 
 	for protocol in args.protocol:
 		for bandwidth in args.bandwidth:
-			paramsQueue.append(params(protocol, bandwidth))
+			paramsQueue.append(params(protocol, bandwidth, args.tag))
 
 	# function definitions
 

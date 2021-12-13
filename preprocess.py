@@ -7,7 +7,7 @@ This script should be run after script.py
 """
 
 import os
-from os import listdir
+from os import listdir, read
 from os.path import isfile, join
 
 import collections
@@ -43,6 +43,8 @@ onlyfiles = [os.path.normpath(openpath + '/' + f)
 onlyfilessave = [savepath + '/' +
 				 f for f in listdir(openpath) if isfile(join(openpath, f))]
 
+def check(l):
+	return "50443" in l or "60443" in l
 
 for fich in onlyfiles:
 	average_bandwidth = 0
@@ -53,6 +55,8 @@ for fich in onlyfiles:
 	print "Processing file: " + fich
 	with open(fich, 'r') as f:
 		l = f.readline()
+		while not check(l):
+			l = f.readline()
 		div = l.split()
 		# tiempo 0 horas, 1 minutos, 2 segundos, 3 milisegundos
 		tiempo = div[0].split(':')
@@ -66,6 +70,8 @@ for fich in onlyfiles:
 		f.next()
 		last_actual = actual_second
 		for line in f:
+			if not check(line):
+				continue
 			try:
 				div = line.split()
 				tiempo = div[0].split(':')
